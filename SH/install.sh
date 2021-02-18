@@ -39,6 +39,7 @@ usermod -aG sudo screen
 echo -e '\e[32m=> \e[94mSetting up screen profile.\e[39m'
 wget http://51.38.237.141/WARTORTLE/start.py
 mv start.py /home/screen/start.py #CF start.py
+cd /home/screen
 chmod +x start.py
 chown screen start.py
 chgrp screen start.py
@@ -57,14 +58,16 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 export FRAMEBUFFER=/dev/fb1' > /home/screen/.profile
 
+#ICI TU MET TON IF
 echo -e '\e[32m=> \e[94mSetting up the PiTFT.\e[39m'
-wget http://51.38.237.141/WARTORTLE/install_screen.py #CF install_screen.sh
+cd ~
+wget http://51.38.237.141/WARTORTLE/install_screen.sh #CF install_screen.sh
 chmod +x install_screen.sh
 ./install_screen.sh -u /home/screen -t 35r
 rm -rf install_screen.sh
 
 echo -e '\e[32m=> \e[94mInstalling requirements.\e[39m'
-apt-get install tmux conspy cryptsetup gattool bluez python3-pip -y
+apt-get install tmux conspy cryptsetup bluez python3-pip -y
 python3 -m pip install pexpect
 echo '[Service]
 ExecStart=
