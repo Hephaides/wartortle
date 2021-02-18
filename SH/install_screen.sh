@@ -101,6 +101,7 @@ function update_configtxt() {
     date=`date`
 
     cat >> /boot/config.txt <<EOF
+
 # --- added by adafruit-pitft-helper $date ---
 [pi1]
 device_tree=bcm2708-rpi-b-plus.dtb
@@ -236,13 +237,16 @@ function install_console() {
 # bits.
 #
 # By default this script does nothing.
+
 # Print the IP address
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
+
 # disable console blanking on PiTFT
 sudo sh -c "TERM=linux setterm -blank 0 >/dev/tty0"
+
 exit 0
 EOF
 }
@@ -264,11 +268,13 @@ function uninstall_console() {
 # bits.
 #
 # By default this script does nothing.
+
 # Print the IP address
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
   printf "My IP address is %s\n" "$_IP"
 fi
+
 exit 0
 EOF
 }
