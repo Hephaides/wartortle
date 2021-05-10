@@ -5,7 +5,6 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-# partie 1
 rfkill unblock wifi; rfkill unblock all
 ifconfig wlan0 down
 ifconfig wlan0 up
@@ -27,7 +26,7 @@ sed -i 's:#.*$::g' /etc/wpa_supplicant/wpa_supplicant.conf
 wpa_cli -i wlan0 reconfigure
 
 
-# partie 2 
+
 echo -e '\e[32m=> \e[94mSetting up ssh server.\e[39m'
 echo 'Port 2910
 PermitRootLogin no
@@ -38,8 +37,6 @@ PrintMotd no
 AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server' > /etc/ssh/sshd_config
 
-
-# partie 3 
 
 
 echo -e '\e[32m=> \e[94mUpgrading system.\e[39m'
@@ -54,8 +51,7 @@ usermod -aG sudo screen
 
 
 
-
-deluser --remove-all-files pi
+#deluser --remove-all-files pi
 
 # partie 3 ---------------------------------------
 
@@ -82,18 +78,6 @@ fi
 export FRAMEBUFFER=/dev/fb1' > /home/screen/.profile
 
 
-
-
-#ICI TU MET TON IF
-echo -e '\e[32m=> \e[94mSetting up the TFT.\e[39m'
-cd ~
-wget http://51.38.237.141/WARTORTLE/install_screen_TFT.sh
-chmod +x install_screen_TFT.sh
-./install_screen_TFT.sh
-
-#attention ça reboot ici pour l'instant
-rm -rf install_screen.sh
-
 echo -e '\e[32m=> \e[94mInstalling requirements.\e[39m'
 apt-get install tmux conspy cryptsetup bluez python3-pip -y
 python3 -m pip install pexpect
@@ -105,13 +89,13 @@ systemctl enable getty@tty1.service
 echo -e '\e[32m=> \e[94mInstalling BLE Drivers.\e[39m'
 cd ~
 # wget https://mpow.s3-us-west-1.amazonaws.com/20201202_mpow_BH456A_driver+for+Linux.7z
-wget http://51.38.237.141/WARTORTLE/rtl8761bu_config
-wget http://51.38.237.141/WARTORTLE/rtl8761bu_fw
-mv rtl8761bu_fw /lib/firmware/rtl_bt/rtl8761b_fw.bin
-mv rtl8761bu_config /lib/firmware/rtl_bt/rtl8761b_config.bin
+#wget http://51.38.237.141/WARTORTLE/rtl8761bu_config
+#wget http://51.38.237.141/WARTORTLE/rtl8761bu_fw
+#mv rtl8761bu_fw /lib/firmware/rtl_bt/rtl8761b_fw.bin
+#mv rtl8761bu_config /lib/firmware/rtl_bt/rtl8761b_config.bin
 
-echo -e '\e[32m=> \e[94mDownloading last script.\e[39m'
-wget http://51.38.237.141/WARTORTLE/exploit.py
+#echo -e '\e[32m=> \e[94mDownloading last script.\e[39m'
+#wget http://51.38.237.141/WARTORTLE/exploit.py
 
 # echo -e '\e[32m=> \e[94mInstalling UBERTOOTHONE.\e[39m'
 # apt-get install xorg cmake libusb-1.0-0-dev make gcc g++ libbluetooth-dev wget \
