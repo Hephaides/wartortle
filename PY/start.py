@@ -495,7 +495,6 @@ while 1:
           print('Receiving BLE clients..')
           while True:
               loops += 1
-              print('loop : ' + str(loops) + "/" + str(MAX_LOOPS), end="")
               data = conn.recv(1024)
               if not data:
                   break
@@ -512,5 +511,9 @@ while 1:
                 break
 
 print("Scanning finished.")
-print("Congrats, you got " + str(len(DATAS)) + " clients !")
+clients = list()
+for data in DATAS:
+  clients.append(data.mac_src)
+
+print("Congrats, you got " + str(len(clients)) + " clients !")
 exit()
