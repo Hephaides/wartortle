@@ -519,6 +519,7 @@ for data in DATAS:
 print("Congrats, you got " + str(len(clients)) + " clients !")
 
 for client in clients:
+  print("\n")
   client.printDATA()
 
 exit()
