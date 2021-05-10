@@ -493,7 +493,7 @@ while 1:
           print('Receiving BLE clients..')
           while True:
               loops += 1
-              print('loop : ' + str(loop) + "/" str(MAX_LOOPS), end="")
+              print('loop : ' + str(loop) + "/" + str(MAX_LOOPS), end="")
               system("clear")
               data = conn.recv(1024)
               if not data:
