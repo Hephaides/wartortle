@@ -2,6 +2,7 @@ from os import system
 from time import sleep
 import socket
 import re
+import pexpect
 
 def banner():
     print("""
@@ -477,7 +478,8 @@ stream = {}
 
 while 1:
   banner()
-  system("ubertooth-btle -f | nc 127.0.0.1 2911")
+  print("Starting Ubertooth process..")
+  processA = pexpect.spawn("sleep 2 | ubertooth-btle -f | nc 127.0.0.1 2911")
   print("Listening..")
   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
       s.bind((HOST, PORT))
