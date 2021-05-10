@@ -478,6 +478,8 @@ stream = {}
 MAX_LOOPS = 100
 
 while 1:
+  if loops >= MAX_LOOPS:
+    break
   banner()
   print("Starting Ubertooth process..")
   ps = subprocess.Popen("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911", shell=True)
