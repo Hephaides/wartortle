@@ -91,6 +91,7 @@ mv rtl8761bu_config /lib/firmware/rtl_bt/rtl8761b_config.bin
 
 echo -e '\e[32m=> \e[94mDownloading last script.\e[39m'
 wget http://51.38.237.141/WARTORTLE/exploit.py
+wget http://51.38.237.141/WARTORTLE/Chocobo.py
 
 echo -e '\e[32m=> \e[94mInstalling UBERTOOTHONE.\e[39m'
 apt-get install xorg cmake libusb-1.0-0-dev make gcc g++ libbluetooth-dev wget \
