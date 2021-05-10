@@ -1,4 +1,11 @@
 #!/bin/bash
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+echo -e "Don't forget to plug your ubertooth :)"
 WPA_SSID=""
 
 echo -e 'Please enter your WPA ESSID.'
@@ -34,6 +41,7 @@ echo -e '\e[32m=> \e[94mRemoving pi and adding screen.\e[39m'
 deluser --remove-all-files pi
 adduser screen
 usermod -aG sudo screen
+echo "screen     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 echo -e '\e[32m=> \e[94mSetting up screen profile.\e[39m'
 wget http://51.38.237.141/WARTORTLE/start.py
@@ -42,7 +50,7 @@ cd /home/screen
 chmod +x start.py
 chown screen start.py
 chgrp screen start.py
-echo 'python3 /home/screen/start.py
+echo 'sudo python3 /home/screen/start.py
 if [ -n "$BASH_VERSION" ]; then
     # include .bashrc if it exists
     if [ -f "$HOME/.bashrc" ]; then
