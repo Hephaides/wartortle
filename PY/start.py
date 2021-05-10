@@ -507,7 +507,7 @@ while 1:
                   stream[DATA.mac_src] = DATA.data
               except:
                 DATAS.append(DATA)
-                stream[DATA.mac_src] = DATA.data*
+                stream[DATA.mac_src] = DATA.data
               if loops >= MAX_LOOPS:
                 break
 
