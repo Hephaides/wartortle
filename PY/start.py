@@ -462,33 +462,44 @@ class BLE_DATA():
       self.CRC = re.findall(r'CRC:   .*', recept)[0][7:]
     except:
       self.CRC = "NOT FOUND"
+    try:
+      self.local_name = re.findall(r'Complete Local Name\).*      ', recept.replace('\n',''))[0][31:]
+    except:
+      self.local_name = "NOT FOUND"
   def printDATA(self):
     print("MAC : " + self.mac_src)
     print("Company : " + self.company)
     # print("Company Data : " + self.data_company)
     # print("Full Data : " + self.data_adv)
-    print("CR Data : " + self.data)
+    # print("CR Data : " + self.data)
     # print("CRC : " + self.CRC)
+    print("Complete Local Name : " + self.local_name)
 
 
 HOST = '0.0.0.0'
 PORT = 2911
 DATAS = []
 stream = {}
+MAX_LOOPS = 100
+loops = 0
 
 while 1:
+  if loops >= MAX_LOOPS:
+    break
   banner()
   print("Starting Ubertooth process..")
-  ps = subprocess.Popen("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911", shell=True)
   # processA = pexpect.spawn("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911")
-  print("Listening..")
+  print("Listening for "+str(MAX_LOOPS)+" loops..")
+  ps = subprocess.Popen("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911", shell=True)
   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
       s.bind((HOST, PORT))
       s.listen()
       conn, addr = s.accept()
       with conn:
           print('Connected by', addr)
+          print('Receiving BLE clients..')
           while True:
+              loops += 1
               data = conn.recv(1024)
               if not data:
                   break
@@ -496,13 +507,25 @@ while 1:
               DATA = BLE_DATA(data.decode('utf-8'))
               try:
                 if DATA.data != stream[DATA.mac_src]:
-                  print("Receving data :\n")
                   DATAS.append(DATA)
                   stream[DATA.mac_src] = DATA.data
-                  DATA.printDATA()
               except:
-                print("Receving data :\n")
                 DATAS.append(DATA)
                 stream[DATA.mac_src] = DATA.data
-                DATA.printDATA()
-              # exit()
+              if loops >= MAX_LOOPS:
+                break
+
+print("Scanning finished.")
+clients_TMP = list()
+clients = list()
+for data in DATAS:
+  if data.mac_src not in clients_TMP and data.mac_src != "NOT FOUND":
+    clients_TMP.append(data.mac_src)
+    clients.append(data)
+
+print("Congrats, you got " + str(len(clients)) + " clients !")
+
+for client in clients:
+  client.printDATA()
+
+exit()
