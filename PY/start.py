@@ -513,7 +513,7 @@ while 1:
 print("Scanning finished.")
 clients = list()
 for data in DATAS:
-  if data.mac_src not in clients:
+  if data.mac_src not in clients and data.mac_src != "NOT FOUND":
     clients.append(data)
 
 print("Congrats, you got " + str(len(clients)) + " clients !")
