@@ -475,20 +475,26 @@ HOST = '0.0.0.0'
 PORT = 2911
 DATAS = []
 stream = {}
+MAX_LOOPS = 100
 
 while 1:
   banner()
   print("Starting Ubertooth process..")
   ps = subprocess.Popen("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911", shell=True)
   # processA = pexpect.spawn("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911")
-  print("Listening..")
+  print("Listening for "+str(MAX_LOOPS)+" loops..")
+  loops = 0
   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
       s.bind((HOST, PORT))
       s.listen()
       conn, addr = s.accept()
       with conn:
           print('Connected by', addr)
+          print('Receiving BLE clients..')
           while True:
+              loops += 1
+              print('loop : ' + str(loop) + "/" str(MAX_LOOPS), end="")
+              system("clear")
               data = conn.recv(1024)
               if not data:
                   break
@@ -496,13 +502,16 @@ while 1:
               DATA = BLE_DATA(data.decode('utf-8'))
               try:
                 if DATA.data != stream[DATA.mac_src]:
-                  print("Receving data :\n")
                   DATAS.append(DATA)
                   stream[DATA.mac_src] = DATA.data
                   DATA.printDATA()
               except:
-                print("Receving data :\n")
                 DATAS.append(DATA)
                 stream[DATA.mac_src] = DATA.data
                 DATA.printDATA()
-              # exit()
+              if loops >= MAX_LOOPS:
+                break
+
+print("Scanning finished.")
+print("Congrats, you got " + str(len(DATAS)) + " clients !")
+exit()
