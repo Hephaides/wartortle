@@ -1,3 +1,4 @@
+#!/bin/bash
 WPA_SSID=""
 
 echo -e 'Please enter your WPA ESSID.'
@@ -7,10 +8,10 @@ WPA_CONF=$(wpa_passphrase $WPA_SSID)
 WPA_CONF=${WPA_CONF:32}
 
 echo -e '\e[32m=> \e[94mSetting up wpa_supplicant.\e[39m'
-echo 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=FR
-$WPA_CONF' > /etc/wpa_supplicant/wpa_supplicant.conf #CF wpa_supplicant.conf
+$WPA_CONF" > /etc/wpa_supplicant/wpa_supplicant.conf #CF wpa_supplicant.conf
 wpa_cli -i wlan0 reconfigure
 
 echo -e '\e[32m=> \e[94mSetting up ssh server.\e[39m'

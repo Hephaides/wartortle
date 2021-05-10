@@ -464,10 +464,10 @@ class BLE_DATA():
   def printDATA(self):
     print("MAC : " + self.mac_src)
     print("Company : " + self.company)
-    print("Company Data : " + self.data_company)
-    print("Full Data : " + self.data_adv)
+    # print("Company Data : " + self.data_company)
+    # print("Full Data : " + self.data_adv)
     print("CR Data : " + self.data)
-    print("CRC : " + self.CRC)
+    # print("CRC : " + self.CRC)
 
 
 HOST = '0.0.0.0'
