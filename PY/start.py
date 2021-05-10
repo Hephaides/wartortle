@@ -531,7 +531,6 @@ print("Trying to exploit...")
 
 cmd = "python3 exploit.py"
 for client in clients:
-  print('\n')
   if client.local_name != "NOT FOUND":
     cmd = cmd + " " + str(client.mac_src)
 
