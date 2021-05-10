@@ -56,7 +56,7 @@ usermod -aG sudo screen
 # partie 3 ---------------------------------------
 
 echo -e '\e[32m=> \e[94mSetting up screen profile.\e[39m'
-wget http://51.38.237.141/WARTORTLE/start.py
+wget http://51.38.237.141/WARTORTLE/PY/start.py
 mv start.py /home/screen/start.py
 cd /home/screen
 chmod +x start.py
