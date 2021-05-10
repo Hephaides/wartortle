@@ -483,9 +483,9 @@ while 1:
     break
   banner()
   print("Starting Ubertooth process..")
-  ps = subprocess.Popen("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911", shell=True)
   # processA = pexpect.spawn("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911")
   print("Listening for "+str(MAX_LOOPS)+" loops..")
+  ps = subprocess.Popen("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911", shell=True)
   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
       s.bind((HOST, PORT))
       s.listen()
@@ -496,7 +496,6 @@ while 1:
           while True:
               loops += 1
               print('loop : ' + str(loops) + "/" + str(MAX_LOOPS), end="")
-              system("clear")
               data = conn.recv(1024)
               if not data:
                   break
@@ -506,11 +505,9 @@ while 1:
                 if DATA.data != stream[DATA.mac_src]:
                   DATAS.append(DATA)
                   stream[DATA.mac_src] = DATA.data
-                  DATA.printDATA()
               except:
                 DATAS.append(DATA)
-                stream[DATA.mac_src] = DATA.data
-                DATA.printDATA()
+                stream[DATA.mac_src] = DATA.data*
               if loops >= MAX_LOOPS:
                 break
 
