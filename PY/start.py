@@ -462,13 +462,18 @@ class BLE_DATA():
       self.CRC = re.findall(r'CRC:   .*', recept)[0][7:]
     except:
       self.CRC = "NOT FOUND"
+    try:
+      self.local_name = re.findall(r'Complete Local Name\).*      ', recept.replace('\n',''))[0][31:]
+    except:
+      self.local_name = "NOT FOUND"
   def printDATA(self):
     print("MAC : " + self.mac_src)
     print("Company : " + self.company)
     # print("Company Data : " + self.data_company)
     # print("Full Data : " + self.data_adv)
-    print("CR Data : " + self.data)
+    # print("CR Data : " + self.data)
     # print("CRC : " + self.CRC)
+    print("Complete Local Name : " + self.local_name)
 
 
 HOST = '0.0.0.0'
@@ -511,15 +516,16 @@ while 1:
                 break
 
 print("Scanning finished.")
+clients_TMP = list()
 clients = list()
 for data in DATAS:
-  if data.mac_src not in clients and data.mac_src != "NOT FOUND":
+  if data.mac_src not in clients_TMP and data.mac_src != "NOT FOUND":
+    clients_TMP.append(data.mac_src)
     clients.append(data)
 
 print("Congrats, you got " + str(len(clients)) + " clients !")
 
 for client in clients:
-  print("\n")
   client.printDATA()
 
 exit()
