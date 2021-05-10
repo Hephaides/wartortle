@@ -514,7 +514,11 @@ print("Scanning finished.")
 clients = list()
 for data in DATAS:
   if data.mac_src not in clients:
-    clients.append(data.mac_src)
+    clients.append(data)
 
 print("Congrats, you got " + str(len(clients)) + " clients !")
+
+for client in clients:
+  client.printDATA()
+
 exit()
