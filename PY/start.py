@@ -469,7 +469,7 @@ class BLE_DATA():
   def printDATA(self):
     print("MAC : " + self.mac_src)
     print("Company : " + self.company)
-    # print("Company Data : " + self.data_company)
+    print("Company Data : " + self.data_company)
     # print("Full Data : " + self.data_adv)
     # print("CR Data : " + self.data)
     # print("CRC : " + self.CRC)
@@ -488,7 +488,6 @@ while 1:
     break
   banner()
   print("Starting Ubertooth process..")
-  # processA = pexpect.spawn("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911")
   print("Listening for "+str(MAX_LOOPS)+" loops..")
   ps = subprocess.Popen("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911", shell=True)
   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -503,7 +502,6 @@ while 1:
               data = conn.recv(1024)
               if not data:
                   break
-              # print(data.decode('utf-8'))
               DATA = BLE_DATA(data.decode('utf-8'))
               try:
                 if DATA.data != stream[DATA.mac_src]:
@@ -526,6 +524,15 @@ for data in DATAS:
 print("Congrats, you got " + str(len(clients)) + " clients !")
 
 for client in clients:
+  print('\n')
   client.printDATA()
 
-exit()
+print("Trying to exploit...")
+
+cmd = "python3 exploit.py"
+for client in clients:
+  print('\n')
+  if client.local_name != "NOT FOUND":
+    cmd = cmd + " " + str(client.mac_src)
+
+system(cmd)
