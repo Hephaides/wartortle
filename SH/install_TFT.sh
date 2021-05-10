@@ -1,28 +1,46 @@
 #!/bin/bash
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+# partie 1
+rfkill unblock wifi; rfkill unblock all
+ifconfig wlan0 down
+ifconfig wlan0 up
+iw wlan0 scan|grep SSID:
 WPA_SSID=""
 
 echo -e 'Please enter your WPA ESSID.'
 read WPA_SSID
 echo -e 'Please enter your WPA PASSWORD.'
-WPA_CONF=$(wpa_passphrase $WPA_SSID)
+WPA_CONF=$(wpa_passphrase "$WPA_SSID")
 WPA_CONF=${WPA_CONF:32}
 
 echo -e '\e[32m=> \e[94mSetting up wpa_supplicant.\e[39m'
 echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=FR
-$WPA_CONF" > /etc/wpa_supplicant/wpa_supplicant.conf #CF wpa_supplicant.conf
+$WPA_CONF" > /etc/wpa_supplicant/wpa_supplicant.conf
+sed -i 's:#.*$::g' /etc/wpa_supplicant/wpa_supplicant.conf
 wpa_cli -i wlan0 reconfigure
 
+
+# partie 2 
 echo -e '\e[32m=> \e[94mSetting up ssh server.\e[39m'
 echo 'Port 2910
-PermitRootLogin yes
+PermitRootLogin no
 ChallengeResponseAuthentication no
 UsePAM yes
-X11Forwarding yes
+X11Forwarding no
 PrintMotd no
 AcceptEnv LANG LC_*
-Subsystem sftp /usr/lib/openssh/sftp-server' > /etc/ssh/sshd_config #CF sshd_config
+Subsystem sftp /usr/lib/openssh/sftp-server' > /etc/ssh/sshd_config
+
+
+# partie 3 
+
 
 echo -e '\e[32m=> \e[94mUpgrading system.\e[39m'
 apt-get update -y && apt-get full-upgrade -y && apt-get upgrade -y && apt-get autoremove -y && apt-get autoclean -y
@@ -31,13 +49,19 @@ echo -e '\e[32m=> \e[94mUpgrading firmware.\e[39m'
 rpi-update
 
 echo -e '\e[32m=> \e[94mRemoving pi and adding screen.\e[39m'
-deluser --remove-all-files pi
 adduser screen
 usermod -aG sudo screen
 
+
+
+
+deluser --remove-all-files pi
+
+# partie 3 ---------------------------------------
+
 echo -e '\e[32m=> \e[94mSetting up screen profile.\e[39m'
 wget http://51.38.237.141/WARTORTLE/start.py
-mv start.py /home/screen/start.py #CF start.py
+mv start.py /home/screen/start.py
 cd /home/screen
 chmod +x start.py
 chown screen start.py
@@ -57,12 +81,17 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 export FRAMEBUFFER=/dev/fb1' > /home/screen/.profile
 
+
+
+
 #ICI TU MET TON IF
-echo -e '\e[32m=> \e[94mSetting up the PiTFT.\e[39m'
+echo -e '\e[32m=> \e[94mSetting up the TFT.\e[39m'
 cd ~
-wget http://51.38.237.141/WARTORTLE/install_screen.sh #CF install_screen.sh
-chmod +x install_screen.sh
-./install_screen.sh -u /home/screen -t 35r
+wget http://51.38.237.141/WARTORTLE/install_screen_TFT.sh
+chmod +x install_screen_TFT.sh
+./install_screen_TFT.sh
+
+#attention ça reboot ici pour l'instant
 rm -rf install_screen.sh
 
 echo -e '\e[32m=> \e[94mInstalling requirements.\e[39m'

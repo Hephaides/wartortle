@@ -5,6 +5,7 @@
 if [ -f /etc/X11/xorg.conf.d/40-libinput.conf ]; then
     sudo rm -rf /etc/X11/xorg.conf.d/40-libinput.conf
 fi
+
 if [ ! -d /etc/X11/xorg.conf.d ]; then
     sudo mkdir -p /etc/X11/xorg.conf.d
 fi
@@ -91,5 +92,5 @@ elif [ $# -gt 1 ]; then
     echo "Too many parameters"
 fi
 
-echo "reboot now"
-sudo reboot
+#echo "reboot now"
+#sudo reboot
