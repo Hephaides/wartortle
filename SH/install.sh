@@ -1,4 +1,8 @@
 #!/bin/bash
+<<<<<<< HEAD
+=======
+
+>>>>>>> b1a02b942309454f0abb455be3ba5997efed1bb1
 WPA_SSID=""
 
 echo -e 'Please enter your WPA ESSID.'
