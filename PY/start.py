@@ -476,6 +476,7 @@ PORT = 2911
 DATAS = []
 stream = {}
 MAX_LOOPS = 100
+loops = 0
 
 while 1:
   if loops >= MAX_LOOPS:
@@ -485,7 +486,6 @@ while 1:
   ps = subprocess.Popen("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911", shell=True)
   # processA = pexpect.spawn("sleep 6 | sudo ubertooth-btle -f | nc 127.0.0.1 2911")
   print("Listening for "+str(MAX_LOOPS)+" loops..")
-  loops = 0
   with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
       s.bind((HOST, PORT))
       s.listen()
