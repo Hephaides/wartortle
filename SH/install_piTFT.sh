@@ -84,32 +84,30 @@ mv rtl8761bu_config /lib/firmware/rtl_bt/rtl8761b_config.bin
 echo -e '\e[32m=> \e[94mDownloading last script.\e[39m'
 wget http://51.38.237.141/WARTORTLE/exploit.py
 
-# echo -e '\e[32m=> \e[94mInstalling UBERTOOTHONE.\e[39m'
-# apt-get install xorg cmake libusb-1.0-0-dev make gcc g++ libbluetooth-dev wget \
-#   pkg-config python3-numpy python3-qtpy python3-distutils python3-setuptools
-# wget https://github.com/greatscottgadgets/libbtbb/archive/2020-12-R1.tar.gz -O libbtbb-2020-12-R1.tar.gz
-# tar -xf libbtbb-2020-12-R1.tar.gz
-# cd libbtbb-2020-12-R1
-# mkdir build
-# cd build
-# cmake ..
-# make
-# make install
-# ldconfig
-# wget https://github.com/greatscottgadgets/ubertooth/releases/download/2020-12-R1/ubertooth-2020-12-R1.tar.xz
-# tar -xf ubertooth-2020-12-R1.tar.xz
-# cd ubertooth-2020-12-R1/host
-# mkdir build
-# cd build
-# cmake ..
-# make
-# make install
-# ldconfig
-# ubertooth-util -v
+echo -e '\e[32m=> \e[94mInstalling UBERTOOTHONE.\e[39m'
+apt-get install xorg cmake libusb-1.0-0-dev make gcc g++ libbluetooth-dev wget \
+  pkg-config python3-numpy python3-qtpy python3-distutils python3-setuptools
+wget https://github.com/greatscottgadgets/libbtbb/archive/2020-12-R1.tar.gz -O libbtbb-2020-12-R1.tar.gz
+tar -xf libbtbb-2020-12-R1.tar.gz
+cd libbtbb-2020-12-R1
+mkdir build
+cd build
+cmake ..
+make
+make install
+ldconfig
+wget https://github.com/greatscottgadgets/ubertooth/releases/download/2020-12-R1/ubertooth-2020-12-R1.tar.xz
+tar -xf ubertooth-2020-12-R1.tar.xz
+cd ubertooth-2020-12-R1/host
+mkdir build
+cd build
+cmake ..
+make
+make install
+ldconfig
+ubertooth-util -v
 # ubertooth-dfu -d bluetooth_rxtx.dfu -r
 # ubertooth-util -v
-# mkfifo /tmp/pipe
-# sudo wireshark
 
 reboot
 
