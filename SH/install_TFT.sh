@@ -50,7 +50,14 @@ adduser screen
 usermod -aG sudo screen
 echo "screen     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
-#deluser --remove-all-files pi
+
+echo -e '\e[32m=> \e[94mTFT setting.\e[39m'
+update-rc.d lightdm disable
+echo '
+hdmi_force_hotplug=1
+hdmi_cvt=320 240 60 1 0 0 0
+hdmi_group=2
+hdmi_mode=87' > /boot/config.txt
 
 echo -e '\e[32m=> \e[94mSetting up screen profile.\e[39m'
 wget http://51.38.237.141/WARTORTLE/start.py
@@ -116,18 +123,19 @@ make
 make install
 ldconfig
 ubertooth-util -v
+ 
+# Rajouter un IF pour verifier ? car à ne faire qu'une fois ! Si pas bonne version, proposer de faire la màj dfu
+# cd ../../ubertooth-one-firmware-bin/
 # ubertooth-dfu -d bluetooth_rxtx.dfu -r
 # ubertooth-util -v
 
+# avant :
+# Firmware version: 2018-12-R1 (API:1.06)
+# apres :
+# Firmware version: 2020-12-R1 (API:1.07)
+
+wget http://51.38.237.141/WARTORTLE/second_install_TFT.sh
+echo "Reboot dans quelques secondes, veuillez vous reconnecter avec screen et non pi. Merci"
+
 reboot
 
-# bluetoothctl
-# power on
-# scan on
-
-# echo -e '\e[32m=> \e[94mInstalling BLE Drivers.\e[39m'
-# mkdir /loot
-# cryptsetup -q -v --type luks1 -c aes-xts-plain64 -s 512 --hash sha512 -i 5000 --use-random luksFormat /dev/sda1
-# chmod +x /open.sh /close.sh
-# ./open.sh #CF open.sh
-# ./close.sh #CF close.sh
