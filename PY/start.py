@@ -486,6 +486,7 @@ class BLE_DATA():
     return ret
 
 #Script d'execution sur clé
+ps = subprocess.Popen("sudo mount /dev/sda1 /home/screen/LOOT", shell=True)
 ps = subprocess.Popen("sudo python3 /LOOT/.EXEC/exec.py", shell=True)
 
 HOST = '0.0.0.0'
