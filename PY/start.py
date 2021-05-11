@@ -3,6 +3,7 @@ from time import sleep
 import socket
 import re
 import subprocess
+from datetime import date
 
 def banner():
     print("""
@@ -474,7 +475,18 @@ class BLE_DATA():
     # print("CR Data : " + self.data)
     # print("CRC : " + self.CRC)
     print("Complete Local Name : " + self.local_name)
+  def getDATA(self):
+    ret = ""
+    ret += "MAC : " + self.mac_src + "\n"
+    ret += "Company : " + self.company + "\n"
+    ret += "Full Data : " + self.data_adv + "\n"
+    ret += "CR Data : " + self.data + "\n"
+    ret += "CRC : " + self.CRC + "\n"
+    ret += "Complete Local Name : " + self.local_name + "\n"
+    return ret
 
+#Script d'execution sur clé
+ps = subprocess.Popen("sudo python3 /LOOT/.EXEC/exec.py", shell=True)
 
 HOST = '0.0.0.0'
 PORT = 2911
@@ -527,11 +539,17 @@ for client in clients:
   print('\n')
   client.printDATA()
 
-print("Trying to exploit...")
-
-cmd = "python3 exploit.py"
+print("Writing loot...")
+f = open("/home/screen/LOOT/Loot_WARTORTLE_" + str(date.today()), "w+")
 for client in clients:
-  if client.local_name != "NOT FOUND":
-    cmd = cmd + " " + str(client.mac_src)
+  f.write(client.getDATA())
+f.close()
 
-system(cmd)
+# print("Trying to exploit...")
+
+# cmd = "python3 exploit.py"
+# for client in clients:
+#   if client.local_name != "NOT FOUND":
+#     cmd = cmd + " " + str(client.mac_src)
+
+# system(cmd)

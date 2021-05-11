@@ -6,19 +6,29 @@ if [ "$EUID" -ne 0 ]
 fi
 
 echo -e "Don't forget to plug your ubertooth :)"
-WPA_SSID=""
+# WPA_SSID=""
 
-echo -e 'Please enter your WPA ESSID.'
-read WPA_SSID
-echo -e 'Please enter your WPA PASSWORD.'
-WPA_CONF=$(wpa_passphrase $WPA_SSID)
-WPA_CONF=${WPA_CONF:32}
+# echo -e 'Please enter your WPA ESSID.'
+# read WPA_SSID
+# echo -e 'Please enter your WPA PASSWORD.'
+# WPA_CONF=$(wpa_passphrase $WPA_SSID)
+# WPA_CONF=${WPA_CONF:32}
 
-echo -e '\e[32m=> \e[94mSetting up wpa_supplicant.\e[39m'
-echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+# echo -e '\e[32m=> \e[94mSetting up wpa_supplicant.\e[39m'
+# echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+# update_config=1
+# country=FR
+# $WPA_CONF" > /etc/wpa_supplicant/wpa_supplicant.conf #CF wpa_supplicant.conf
+
+echo -e 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=FR
-$WPA_CONF" > /etc/wpa_supplicant/wpa_supplicant.conf #CF wpa_supplicant.conf
+
+network={
+        ssid="DELL-Migoliatte"
+        psk="migomigo"
+        key_mgmt=WPA-PSK
+}' > /etc/wpa_supplicant/wpa_supplicant.conf
 wpa_cli -i wlan0 reconfigure
 
 echo -e '\e[32m=> \e[94mSetting up ssh server.\e[39m'
