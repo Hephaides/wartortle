@@ -487,7 +487,8 @@ class BLE_DATA():
 
 #Script d'execution sur clé
 ps = subprocess.Popen("sudo mount /dev/sda1 /home/screen/LOOT", shell=True)
-ps = subprocess.Popen("sudo python3 /LOOT/.EXEC/exec.py", shell=True)
+system("sleep 10")
+ps = subprocess.Popen("sudo python3 /home/screen/LOOT/.EXEC/exec.py", shell=True)
 
 HOST = '0.0.0.0'
 PORT = 2911
