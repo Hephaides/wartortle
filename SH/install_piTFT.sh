@@ -6,29 +6,20 @@ if [ "$EUID" -ne 0 ]
 fi
 
 echo -e "Don't forget to plug your ubertooth :)"
-# WPA_SSID=""
+WPA_SSID=""
 
-# echo -e 'Please enter your WPA ESSID.'
-# read WPA_SSID
-# echo -e 'Please enter your WPA PASSWORD.'
-# WPA_CONF=$(wpa_passphrase $WPA_SSID)
-# WPA_CONF=${WPA_CONF:32}
+echo -e 'Please enter your WPA ESSID.'
+read WPA_SSID
+echo -e 'Please enter your WPA PASSWORD.'
+WPA_CONF=$(wpa_passphrase $WPA_SSID)
+WPA_CONF=${WPA_CONF:32}
 
-# echo -e '\e[32m=> \e[94mSetting up wpa_supplicant.\e[39m'
-# echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
-# update_config=1
-# country=FR
-# $WPA_CONF" > /etc/wpa_supplicant/wpa_supplicant.conf #CF wpa_supplicant.conf
-
-echo -e 'ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
+echo -e '\e[32m=> \e[94mSetting up wpa_supplicant.\e[39m'
+echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
 update_config=1
 country=FR
-
-network={
-        ssid="DELL-Migoliatte"
-        psk="migomigo"
-        key_mgmt=WPA-PSK
-}' > /etc/wpa_supplicant/wpa_supplicant.conf
+$WPA_CONF" > /etc/wpa_supplicant/wpa_supplicant.conf #CF wpa_supplicant.conf
+sed -i 's:#.*$::g' /etc/wpa_supplicant/wpa_supplicant.conf
 wpa_cli -i wlan0 reconfigure
 
 echo -e '\e[32m=> \e[94mSetting up ssh server.\e[39m'
@@ -48,14 +39,13 @@ echo -e '\e[32m=> \e[94mUpgrading firmware.\e[39m'
 rpi-update
 
 echo -e '\e[32m=> \e[94mRemoving pi and adding screen.\e[39m'
-deluser --remove-all-files pi
 adduser screen
 usermod -aG sudo screen
 echo "screen     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 echo -e '\e[32m=> \e[94mSetting up screen profile.\e[39m'
 wget http://51.38.237.141/WARTORTLE/start.py
-mv start.py /home/screen/start.py #CF start.py
+mv start.py /home/screen/start.py
 cd /home/screen
 chmod +x start.py
 chown screen start.py
@@ -75,7 +65,6 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 export FRAMEBUFFER=/dev/fb1' > /home/screen/.profile
 
-#ICI TU MET TON IF
 echo -e '\e[32m=> \e[94mSetting up the PiTFT.\e[39m'
 cd ~
 wget http://51.38.237.141/WARTORTLE/install_screen.sh #CF install_screen.sh
@@ -93,7 +82,6 @@ systemctl enable getty@tty1.service
 
 echo -e '\e[32m=> \e[94mInstalling BLE Drivers.\e[39m'
 cd ~
-# wget https://mpow.s3-us-west-1.amazonaws.com/20201202_mpow_BH456A_driver+for+Linux.7z
 wget http://51.38.237.141/WARTORTLE/rtl8761bu_config
 wget http://51.38.237.141/WARTORTLE/rtl8761bu_fw
 mv rtl8761bu_fw /lib/firmware/rtl_bt/rtl8761b_fw.bin
@@ -105,7 +93,7 @@ wget http://51.38.237.141/WARTORTLE/Chocobo.py
 
 echo -e '\e[32m=> \e[94mInstalling UBERTOOTHONE.\e[39m'
 apt-get install xorg cmake libusb-1.0-0-dev make gcc g++ libbluetooth-dev wget \
-  pkg-config python3-numpy python3-qtpy python3-distutils python3-setuptools
+  pkg-config python3-numpy python3-qtpy python3-distutils python3-setuptools -y
 wget https://github.com/greatscottgadgets/libbtbb/archive/2020-12-R1.tar.gz -O libbtbb-2020-12-R1.tar.gz
 tar -xf libbtbb-2020-12-R1.tar.gz
 cd libbtbb-2020-12-R1
@@ -125,18 +113,13 @@ make
 make install
 ldconfig
 ubertooth-util -v
+
 # ubertooth-dfu -d bluetooth_rxtx.dfu -r
 # ubertooth-util -v
 
+mkdir /home/screen/LOOT
+
+wget http://51.38.237.141/WARTORTLE/second_install_TFT.sh
+echo "Reboot dans quelques secondes, veuillez vous reconnecter avec screen et non pi. Merci"
+
 reboot
-
-# bluetoothctl
-# power on
-# scan on
-
-# echo -e '\e[32m=> \e[94mInstalling BLE Drivers.\e[39m'
-# mkdir /loot
-# cryptsetup -q -v --type luks1 -c aes-xts-plain64 -s 512 --hash sha512 -i 5000 --use-random luksFormat /dev/sda1
-# chmod +x /open.sh /close.sh
-# ./open.sh #CF open.sh
-# ./close.sh #CF close.sh

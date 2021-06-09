@@ -5,10 +5,7 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
-rfkill unblock wifi; rfkill unblock all
-ifconfig wlan0 down
-ifconfig wlan0 up
-iw wlan0 scan|grep SSID:
+echo -e "Don't forget to plug your ubertooth :)"
 WPA_SSID=""
 
 echo -e 'Please enter your WPA ESSID.'
@@ -25,8 +22,6 @@ $WPA_CONF" > /etc/wpa_supplicant/wpa_supplicant.conf
 sed -i 's:#.*$::g' /etc/wpa_supplicant/wpa_supplicant.conf
 wpa_cli -i wlan0 reconfigure
 
-
-
 echo -e '\e[32m=> \e[94mSetting up ssh server.\e[39m'
 echo 'Port 2910
 PermitRootLogin no
@@ -36,8 +31,6 @@ X11Forwarding no
 PrintMotd no
 AcceptEnv LANG LC_*
 Subsystem sftp /usr/lib/openssh/sftp-server' > /etc/ssh/sshd_config
-
-
 
 echo -e '\e[32m=> \e[94mUpgrading system.\e[39m'
 apt-get update -y && apt-get full-upgrade -y && apt-get upgrade -y && apt-get autoremove -y && apt-get autoclean -y
@@ -49,7 +42,6 @@ echo -e '\e[32m=> \e[94mRemoving pi and adding screen.\e[39m'
 adduser screen
 usermod -aG sudo screen
 echo "screen     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
-
 
 echo -e '\e[32m=> \e[94mTFT setting.\e[39m'
 update-rc.d lightdm disable
@@ -81,7 +73,6 @@ if [ -d "$HOME/.local/bin" ] ; then
 fi
 export FRAMEBUFFER=/dev/fb1' > /home/screen/.profile
 
-
 echo -e '\e[32m=> \e[94mInstalling requirements.\e[39m'
 apt-get install tmux conspy cryptsetup bluez python3-pip -y
 python3 -m pip install pexpect
@@ -103,7 +94,7 @@ wget http://51.38.237.141/WARTORTLE/Chocobo.py
 
 echo -e '\e[32m=> \e[94mInstalling UBERTOOTHONE.\e[39m'
 apt-get install xorg cmake libusb-1.0-0-dev make gcc g++ libbluetooth-dev wget \
-  pkg-config python3-numpy python3-qtpy python3-distutils python3-setuptools
+  pkg-config python3-numpy python3-qtpy python3-distutils python3-setuptools -y
 wget https://github.com/greatscottgadgets/libbtbb/archive/2020-12-R1.tar.gz -O libbtbb-2020-12-R1.tar.gz
 tar -xf libbtbb-2020-12-R1.tar.gz
 cd libbtbb-2020-12-R1
@@ -133,6 +124,8 @@ ubertooth-util -v
 # Firmware version: 2018-12-R1 (API:1.06)
 # apres :
 # Firmware version: 2020-12-R1 (API:1.07)
+
+mkdir /home/screen/LOOT
 
 wget http://51.38.237.141/WARTORTLE/second_install_TFT.sh
 echo "Reboot dans quelques secondes, veuillez vous reconnecter avec screen et non pi. Merci"
