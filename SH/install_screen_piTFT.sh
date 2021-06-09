@@ -418,13 +418,13 @@ info PITFT "Updating SysFS rules for Touchscreen..."
 update_udev || bail "Unable to update /etc/udev/rules.d"
 
 # ask for console access
-if ask "Would you like the console to appear on the PiTFT display?"; then
-    info PITFT "Updating console to PiTFT..."
-    install_console || bail "Unable to configure console"
-else
-    info PITFT "Making sure console doesn't use PiTFT"
-    uninstall_console || bail "Unable to configure console"
-fi
+# if ask "Would you like the console to appear on the PiTFT display?"; then
+info PITFT "Updating console to PiTFT..."
+install_console || bail "Unable to configure console"
+# else
+#     info PITFT "Making sure console doesn't use PiTFT"
+#     uninstall_console || bail "Unable to configure console"
+# fi
 
 info PITFT "Updating /etc/modules..."
 update_etcmodules || bail "Unable to update /etc/modules"

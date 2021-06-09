@@ -67,7 +67,7 @@ export FRAMEBUFFER=/dev/fb1' > /home/screen/.profile
 
 echo -e '\e[32m=> \e[94mSetting up the PiTFT.\e[39m'
 cd ~
-wget http://51.38.237.141/WARTORTLE/install_screen.sh #CF install_screen.sh
+wget http://51.38.237.141/WARTORTLE/install_screen_piTFT.sh #CF install_screen.sh
 chmod +x install_screen.sh
 ./install_screen.sh -u /home/screen -t 35r
 rm -rf install_screen.sh
