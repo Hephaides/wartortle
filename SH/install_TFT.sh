@@ -47,7 +47,7 @@ echo -e '\e[32m=> \e[94mUpgrading system.\e[39m'
 apt-get update -y && apt-get full-upgrade -y && apt-get upgrade -y && apt-get autoremove -y && apt-get autoclean -y
 
 echo -e '\e[32m=> \e[94mUpgrading firmware.\e[39m'
-rpi-update
+echo "y"|rpi-update
 
 
 
@@ -141,5 +141,5 @@ echo "Reboot dans quelques secondes, veuillez vous reconnecter avec screen et no
 echo "lancez 'deluser --remove-all-files pi' au prochain boot"
 cp -r /home/pi/ /root/
 
-cd /root/LCD-show/ && sudo ./LCD35-show 180 #ça reboot
+cd /root/pi/LCD-show/ && sudo ./LCD35-show 180 #ça reboot
 #reboot
