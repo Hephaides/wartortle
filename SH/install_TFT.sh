@@ -5,6 +5,11 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+rfkill unblock wifi; rfkill unblock all
+ifconfig wlan0 down
+ifconfig wlan0 up
+iw wlan0 scan|grep SSID:
+
 echo -e "Don't forget to plug your ubertooth :)"
 WPA_SSID=""
 
@@ -13,6 +18,12 @@ read WPA_SSID
 echo -e 'Please enter your WPA PASSWORD.'
 WPA_CONF=$(wpa_passphrase "$WPA_SSID")
 WPA_CONF=${WPA_CONF:32}
+
+echo -e '\e[32m=> \e[94mRemoving pi and adding screen.\e[39m'
+#mv /home/pi/* /root/
+adduser screen
+usermod -aG sudo screen
+echo "screen     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 echo -e '\e[32m=> \e[94mSetting up wpa_supplicant.\e[39m'
 echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -36,26 +47,26 @@ echo -e '\e[32m=> \e[94mUpgrading system.\e[39m'
 apt-get update -y && apt-get full-upgrade -y && apt-get upgrade -y && apt-get autoremove -y && apt-get autoclean -y
 
 echo -e '\e[32m=> \e[94mUpgrading firmware.\e[39m'
-rpi-update
+echo "y"|rpi-update
 
-echo -e '\e[32m=> \e[94mRemoving pi and adding screen.\e[39m'
-adduser screen
-usermod -aG sudo screen
-echo "screen     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
 
 echo -e '\e[32m=> \e[94mTFT setting.\e[39m'
-update-rc.d lightdm disable
-echo '
-hdmi_force_hotplug=1
-hdmi_cvt=320 240 60 1 0 0 0
-hdmi_group=2
-hdmi_mode=87' > /boot/config.txt
+systemctl disable lightdm.service
+#echo '
+#hdmi_force_hotplug=1
+#hdmi_cvt=320 240 60 1 0 0 0
+#hdmi_group=2
+#hdmi_mode=87' > /boot/config.txt
 
 echo -e '\e[32m=> \e[94mSetting up screen profile.\e[39m'
 wget http://51.38.237.141/WARTORTLE/start.py
 mv start.py /home/screen/start.py
 cd /home/screen
+#mkdir /home/screen/LOOT
 chmod +x start.py
+#chown screen /home/screen/LOOT
+#chgrp screen /home/screen/LOOT
 chown screen start.py
 chgrp screen start.py
 echo 'python3 /home/screen/start.py
@@ -74,7 +85,7 @@ fi
 export FRAMEBUFFER=/dev/fb1' > /home/screen/.profile
 
 echo -e '\e[32m=> \e[94mInstalling requirements.\e[39m'
-apt-get install tmux conspy cryptsetup bluez python3-pip -y
+echo "y"|apt-get install tmux conspy cryptsetup bluez python3-pip -y
 python3 -m pip install pexpect
 echo '[Service]
 ExecStart=
@@ -116,19 +127,19 @@ ldconfig
 ubertooth-util -v
  
 # Rajouter un IF pour verifier ? car à ne faire qu'une fois ! Si pas bonne version, proposer de faire la màj dfu
-# cd ../../ubertooth-one-firmware-bin/
-# ubertooth-dfu -d bluetooth_rxtx.dfu -r
-# ubertooth-util -v
+#cd ../../ubertooth-one-firmware-bin/
+#ubertooth-dfu -d bluetooth_rxtx.dfu -r
+#ubertooth-util -v
 
 # avant :
 # Firmware version: 2018-12-R1 (API:1.06)
 # apres :
 # Firmware version: 2020-12-R1 (API:1.07)
 
-mkdir /home/screen/LOOT
-
-wget http://51.38.237.141/WARTORTLE/second_install_TFT.sh
+#wget http://51.38.237.141/WARTORTLE/second_install_TFT.sh
 echo "Reboot dans quelques secondes, veuillez vous reconnecter avec screen et non pi. Merci"
+echo "lancez 'deluser --remove-all-files pi' au prochain boot"
+cp -r /home/pi/ /root/
 
-reboot
-
+cd /root/pi/LCD-show/ && sudo ./LCD35-show 180 #ça reboot
+#reboot
