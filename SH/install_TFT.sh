@@ -39,23 +39,27 @@ echo -e '\e[32m=> \e[94mUpgrading firmware.\e[39m'
 rpi-update
 
 echo -e '\e[32m=> \e[94mRemoving pi and adding screen.\e[39m'
+#mv /home/pi/* /root/
 adduser screen
 usermod -aG sudo screen
 echo "screen     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 echo -e '\e[32m=> \e[94mTFT setting.\e[39m'
-update-rc.d lightdm disable
-echo '
-hdmi_force_hotplug=1
-hdmi_cvt=320 240 60 1 0 0 0
-hdmi_group=2
-hdmi_mode=87' > /boot/config.txt
+systemctl disable lightdm.service
+#echo '
+#hdmi_force_hotplug=1
+#hdmi_cvt=320 240 60 1 0 0 0
+#hdmi_group=2
+#hdmi_mode=87' > /boot/config.txt
 
 echo -e '\e[32m=> \e[94mSetting up screen profile.\e[39m'
 wget http://51.38.237.141/WARTORTLE/start.py
 mv start.py /home/screen/start.py
 cd /home/screen
+#mkdir /home/screen/LOOT
 chmod +x start.py
+#chown screen /home/screen/LOOT
+#chgrp screen /home/screen/LOOT
 chown screen start.py
 chgrp screen start.py
 echo 'python3 /home/screen/start.py
@@ -74,7 +78,7 @@ fi
 export FRAMEBUFFER=/dev/fb1' > /home/screen/.profile
 
 echo -e '\e[32m=> \e[94mInstalling requirements.\e[39m'
-apt-get install tmux conspy cryptsetup bluez python3-pip -y
+echo "y"|apt-get install tmux conspy cryptsetup bluez python3-pip -y
 python3 -m pip install pexpect
 echo '[Service]
 ExecStart=
@@ -116,19 +120,25 @@ ldconfig
 ubertooth-util -v
  
 # Rajouter un IF pour verifier ? car à ne faire qu'une fois ! Si pas bonne version, proposer de faire la màj dfu
-# cd ../../ubertooth-one-firmware-bin/
-# ubertooth-dfu -d bluetooth_rxtx.dfu -r
-# ubertooth-util -v
+#cd ../../ubertooth-one-firmware-bin/
+#ubertooth-dfu -d bluetooth_rxtx.dfu -r
+#ubertooth-util -v
 
 # avant :
 # Firmware version: 2018-12-R1 (API:1.06)
 # apres :
 # Firmware version: 2020-12-R1 (API:1.07)
 
+<<<<<<< HEAD
+#wget http://51.38.237.141/WARTORTLE/second_install_TFT.sh
+=======
 mkdir /home/screen/LOOT
 
 wget http://51.38.237.141/WARTORTLE/second_install_TFT.sh
+>>>>>>> e4001a282e04431e8442d7353e8b3c2f10957d81
 echo "Reboot dans quelques secondes, veuillez vous reconnecter avec screen et non pi. Merci"
+echo "lancez 'deluser --remove-all-files pi' au prochain boot"
+cp -r /home/pi/ /root/
 
-reboot
-
+cd /root/LCD-show/ && sudo ./LCD35-show 180 #ça reboot
+#reboot
