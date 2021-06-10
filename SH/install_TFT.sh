@@ -5,6 +5,11 @@ if [ "$EUID" -ne 0 ]
   exit
 fi
 
+rfkill unblock wifi; rfkill unblock all
+ifconfig wlan0 down
+ifconfig wlan0 up
+iw wlan0 scan|grep SSID:
+
 echo -e "Don't forget to plug your ubertooth :)"
 WPA_SSID=""
 
@@ -13,6 +18,12 @@ read WPA_SSID
 echo -e 'Please enter your WPA PASSWORD.'
 WPA_CONF=$(wpa_passphrase "$WPA_SSID")
 WPA_CONF=${WPA_CONF:32}
+
+echo -e '\e[32m=> \e[94mRemoving pi and adding screen.\e[39m'
+#mv /home/pi/* /root/
+adduser screen
+usermod -aG sudo screen
+echo "screen     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 echo -e '\e[32m=> \e[94mSetting up wpa_supplicant.\e[39m'
 echo "ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=netdev
@@ -38,11 +49,7 @@ apt-get update -y && apt-get full-upgrade -y && apt-get upgrade -y && apt-get au
 echo -e '\e[32m=> \e[94mUpgrading firmware.\e[39m'
 rpi-update
 
-echo -e '\e[32m=> \e[94mRemoving pi and adding screen.\e[39m'
-#mv /home/pi/* /root/
-adduser screen
-usermod -aG sudo screen
-echo "screen     ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
 
 echo -e '\e[32m=> \e[94mTFT setting.\e[39m'
 systemctl disable lightdm.service
@@ -129,13 +136,7 @@ ubertooth-util -v
 # apres :
 # Firmware version: 2020-12-R1 (API:1.07)
 
-<<<<<<< HEAD
 #wget http://51.38.237.141/WARTORTLE/second_install_TFT.sh
-=======
-mkdir /home/screen/LOOT
-
-wget http://51.38.237.141/WARTORTLE/second_install_TFT.sh
->>>>>>> e4001a282e04431e8442d7353e8b3c2f10957d81
 echo "Reboot dans quelques secondes, veuillez vous reconnecter avec screen et non pi. Merci"
 echo "lancez 'deluser --remove-all-files pi' au prochain boot"
 cp -r /home/pi/ /root/
