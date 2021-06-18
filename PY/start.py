@@ -1,9 +1,23 @@
+#!/usr/bin/python 
+
 from os import system
 from time import sleep
 import socket
 import re
 import subprocess
 from datetime import date
+import mariadb 
+
+try:
+    connDB = mariadb.connect(
+        user="db_user",
+        host="localhost",
+        #port=3306,
+        database="WARTORTLE")
+    cur = connDB.cursor() 
+except mariadb.Error as e:
+    print(f"Error connecting to MariaDB Platform: {e}")
+    exit(0)
 
 def banner():
     print("""
@@ -545,6 +559,25 @@ print("Writing loot...")
 f = open("/home/screen/LOOT/Loot_WARTORTLE_" + str(date.today()), "w+")
 for client in clients:
   f.write(client.getDATA())
+  #insert information in BDD
+  if(client.company != "NOT FOUND" or client.local_name != "NOT FOUND"):
+    print("DANS IF <> client.company="+client.company+" <> client.local_name="+client.local_name)
+    try: 
+        cur.execute("INSERT INTO DEVICES (COMPANY,NAME,EXPLOITPATH) VALUES (?, ?, ?)", (client.company,client.local_name,"/etc/exploitpath/")) 
+    except mariadb.Error as e: 
+        print(f"Error: {e}")
+
+    cur.execute("SELECT ID_DEVICES FROM DEVICES WHERE COMPANY=? AND NAME =?",(client.company,client.local_name))
+
+    for (ID_DEVICES) in cur:
+      ID=ID_DEVICES[0]
+    try: 
+        cur.execute("INSERT INTO MAC (MAC,ID_DEVICES) VALUES (?, ?)", (client.mac_src,ID)) 
+    except mariadb.Error as e: 
+        print(f"Error: {e}")
+
+connDB.commit()       
+connDB.close()
 f.close()
 
 # print("Trying to exploit...")
@@ -555,3 +588,4 @@ f.close()
 #     cmd = cmd + " " + str(client.mac_src)
 
 # system(cmd)
+
