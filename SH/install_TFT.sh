@@ -1,7 +1,9 @@
 #!/usr/bin/env bash
 ### ==============================================================================
+###
 ### Created by Migoliatte
 ### Installation of the Rasberry Pi with a Amazon screen ( not official )
+###
 ### ==============================================================================
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
@@ -197,7 +199,3 @@ function main() {
 }
 
 main 
-
- 
-
-
