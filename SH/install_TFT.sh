@@ -6,13 +6,12 @@
 
 script_dir=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 
-
 function help() {
-        msg "
-                help: $(basename "${BASH_SOURCE[0]}") 
-                Script description here.  
-                Run this program only one time with root or sudo user
-        "
+  msg "
+          help: $(basename "${BASH_SOURCE[0]}") 
+          Script description here.  
+          Run this program only one time with root or sudo user
+  "
 }
 
 function colors_cli() {
@@ -24,15 +23,15 @@ function colors_cli() {
 }
 
 function msg() {
-        echo >&2 -e "${1}"
+  echo >&2 -e "${1}"
 }
 
 function killProgram() {
-        local msg=$1
-        local code=${2-1} # default exit status 1
-        msg "${RED}$msg${end_colors}"
-        help
-        exit "$code"
+  msg=$1
+  returnCode=${2-1}
+  msg "${RED}$msg${end_colors}"
+  help
+  exit "$returnCode"
 }
 
 function test_user(){
