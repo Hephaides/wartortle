@@ -500,7 +500,7 @@ class BLE_DATA():
     return ret
 
 #Script d'execution sur clé
-ps = subprocess.Popen("sudo mount /dev/sda1 /home/screen/LOOT;sudo chmod 777 /home/screen/LOOT", shell=True)
+ps = subprocess.Popen("sudo mount /dev/sda1 /home/screen/LOOT 2>/tmp/error_start.log || sudo mount /dev/sdb1 /home/screen/LOOT 2>/tmp/error_start.log;sudo chmod 777 /home/screen/LOOT", shell=True)
 system("sleep 10")
 ps = subprocess.Popen("sudo python3 /home/screen/LOOT/.EXEC/exec.py", shell=True)
 
