@@ -111,7 +111,7 @@ function screenDisplaySetting(){
   chmod +x start.py
   chown screen start.py
   chgrp screen start.py
-  echo 'python3 /home/screen/start.py
+  echo 'sudo python3 /home/screen/start.py
   if [ -n "$BASH_VERSION" ]; then
       # include .bashrc if it exists
       if [ -f "$HOME/.bashrc" ]; then
